@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color:#767575; 
+            display: flex;  
+            justify-content: center;         
+        }
+        .container{
+            background-color: rgb(176, 176, 176);
+            width: 274px;          
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 40px;
+            border: 2px solid rgb(78, 77, 77);
+        }
+        h2{
+            text-align: center;          
+        }
+        button{
+        padding: 8px;
+        border-radius: 5px;
+        border: none; 
+        cursor: pointer;      
+        }
+        input{
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+            text-transform: capitalize;
+        }
+        .completed{
+            text-decoration: line-through;
+            color: rgb(237, 0, 0);
+        }
+        ol{
+            margin-top: 15px;   
+            padding: 0px;    
+              
+        }
+        li{
+           padding: 1px;
+           margin: 2px;
+           justify-content: space-between;
+           display: flex;
+           border: solid rgba(0, 0, 0, 0.16) 2px;
+           align-items: center;
+           border-radius: 5px;     
+           text-transform: capitalize; 
+           background-color:   rgb(210, 208, 208);    
+           animation: slideIn .3s ease;         
+        }  
+        @keyframes slideIn{
+            from{
+                opacity: 0;
+                transform: translate(-10px);
+            }
+            to{
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        li button{
+        background: none;
+        color: red;
+        font-size: 17px;
+        padding: 4px;       
+        }
+                   
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>To-Do App</h2>
+        <p id="counter">Total Tasks: 0</p>
+        <div>
+        <input type="text" id="inpBtn" placeholder="Enter your Task">
+        <button id="addBtn">Add</button>
+        <button id="clrAll">Clear</button>
+        </div>
+        <ol id="taskList"></ol>
+    </div>
+    <script>
+        const inpBtn = document.getElementById("inpBtn");
+        const addBtn = document.getElementById("addBtn");
+        const clrAll = document.getElementById("clrAll");
+        const taskList = document.getElementById("taskList");
+        const counter = document.getElementById("counter");
+        
+        function updateCounter(){
+            counter.textContent = `Total Tasks: ${taskList.children.length}`;
+        }
+
+        addBtn.addEventListener("click",function(){
+         const task= inpBtn.value.trim();
+         if(task===""){
+            return;
+         }          
+          
+         const li= document.createElement("li");
+         const span= document.createElement("span");
+         span.textContent= task;
+         
+         span.addEventListener("click",function(){
+         span.classList.toggle("completed");
+         });
+         
+         const btnGroup= document.createElement("div");
+         const editBtn= document.createElement("button");
+         editBtn.textContent="✒️";
+
+         editBtn.addEventListener("click",function(event){
+           event.stopPropagation();
+
+            const newTask= prompt("Edit your task:",span.textContent);
+            if(newTask !== null && newTask.trim() !==""){
+            span.textContent = newTask;
+            }
+         });
+            
+         const deleteBtn= document.createElement("button");
+         deleteBtn.textContent = "🗑";
+         
+         deleteBtn.addEventListener("click",function(event){
+            event.stopPropagation();
+            li.remove();
+            updateCounter();
+         });
+        
+         btnGroup.appendChild(editBtn);
+         btnGroup.appendChild(deleteBtn);
+
+         li.appendChild(span);
+         li.appendChild(btnGroup);
+
+         taskList.appendChild(li);
+
+         updateCounter();
+        
+         inpBtn.value="";
+         inpBtn.focus();
+        });
+           
+        clrAll.addEventListener("click",function(){
+            taskList.innerHTML="";
+            updateCounter();
+        });
+
+        inpBtn.addEventListener("keydown",function(e){
+            if(e.key==="Enter"){
+                addBtn.click();
+            }
+        });
+        
+         
+
+    </script>
+</body>
+</html>
